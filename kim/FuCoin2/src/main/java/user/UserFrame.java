@@ -36,7 +36,7 @@ public class UserFrame extends JFrame {
 	public UserFrame(UserStaticContext context) {
 		this.userControl = context.getUserControl();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 830, 387);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -82,7 +82,7 @@ public class UserFrame extends JFrame {
 		addressBook_panel
 				.setBorder(new TitledBorder(null, "Address Book", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		contentPane.add(addressBook_panel);
-		addressBook_panel.setLayout(new BoxLayout(addressBook_panel, BoxLayout.X_AXIS));
+		addressBook_panel.setLayout(new BoxLayout(addressBook_panel, BoxLayout.Y_AXIS));
 
 		JPanel panel_4 = new JPanel();
 		addressBook_panel.add(panel_4);
@@ -108,6 +108,7 @@ public class UserFrame extends JFrame {
 		newAddressField.setColumns(10);
 
 		JButton btnAdd = new JButton("Add");
+		panel_4.add(btnAdd);
 		btnAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -116,11 +117,13 @@ public class UserFrame extends JFrame {
 				userControl.addNewNeighbour(userName, address);
 			}
 		});
-		addressBook_panel.add(btnAdd);
 
 		JPanel panel_3 = new JPanel();
 		addressBook_panel.add(panel_3);
-		panel_3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.Y_AXIS));
+
+		JLabel lblNewLabel = new JLabel("Neighbours");
+		panel_3.add(lblNewLabel);
 
 		neighboursList = new JList<String>();
 		panel_3.add(neighboursList);
