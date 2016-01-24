@@ -1,7 +1,14 @@
 package main;
 
+import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
+import akka.actor.Props;
+import com.typesafe.config.ConfigFactory;
 import user.UserControl;
+import akka.actor.Address;
+import akka.actor.AddressFromURIString;
+import akka.actor.Deploy;
+import akka.remote.RemoteScope;
 
 public class Main {
 
@@ -12,6 +19,11 @@ public class Main {
 	 */
 	public static void main(String[] args) throws InterruptedException {
 		ActorSystem system = ActorSystem.create("TestSystem");
+		//remote actor init
+		ConfigFactory.parseString("akka.remote.netty.hostname=\"1.2.3.4\"").withFallback(ConfigFactory.load());
+		ActorRef actor = system.actorOf(new Props(SampleActor.class), "sampleActor");//SampleActor?
+		actor.tell("Remote actors", null);
+
 		UserControl kim = new UserControl(system, "Kim", 100);
 		UserControl alex = new UserControl(system, "Alex", 1000);
 		UserControl dimi = new UserControl(system, "Dimi", 400);
