@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 
 import akka.actor.ActorRef;
+import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
 import akka.actor.Inbox;
 import scala.concurrent.duration.FiniteDuration;
@@ -57,6 +58,8 @@ public class UserControl {
 	}
 
 	public void addNewNeighbour(String userName, String address) {
+		ActorSelection selection = system.actorSelection("akka.tcp://TestSystem@127.0.0.1:2552/user/$b");
+		System.out.println(selection);
 		ActorRef actor = system.actorFor(address);
 		Inbox inbox = Inbox.create(system);
 		JoinReply reply = new JoinReply(userName, actor);

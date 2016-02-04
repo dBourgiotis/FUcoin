@@ -27,16 +27,18 @@ public class UserActor extends UntypedActor {
 	private final Map<String, ActorRef> addressBook;
 	private final Collection<UUID> seenMessages;
 	private final Map<UUID, Integer> openRequests;
+	private final Map<UUID, Integer> openReplies;
 	private final UserControl userControl;
-	private final int MAX_SEEN_MESSAGES_NUMBER = 1000;
+	private static final int MAX_SEEN_MESSAGES = 1000;
 
 	private UserActor(String userName, UserControl userControl, int balance) {
 		this.userName = userName;
 		this.userControl = userControl;
 		this.setBalance(balance);
 		addressBook = new HashMap<String, ActorRef>();
-		seenMessages = new CircularFifoQueue<UUID>(MAX_SEEN_MESSAGES_NUMBER);
+		seenMessages = new CircularFifoQueue<UUID>(MAX_SEEN_MESSAGES);
 		openRequests = new HashMap<UUID, Integer>();
+		openReplies = new HashMap<UUID, Integer>();
 	}
 
 	private UserActor(String userName, UserControl userControl) {
@@ -62,6 +64,7 @@ public class UserActor extends UntypedActor {
 		if (message instanceof JoinRequest) {
 			handleJoinRequest((JoinRequest) message);
 		} else if (message instanceof JoinReply) {
+			System.out.println("JoinReply");
 			handleJoinReply((JoinReply) message);
 		} else if (message instanceof TransactionInit) {
 			System.out.println("TransactionInt");
@@ -70,9 +73,10 @@ public class UserActor extends UntypedActor {
 			System.out.println("TransactionRequest");
 			handleTransactionRequest((TransactionRequest) message);
 		} else if (message instanceof TransactionReply) {
-			handleTransactionReply((TransactionReply) message);
 			System.out.println("TransactionReply");
+			handleTransactionReply((TransactionReply) message);
 		} else if (message instanceof NeighbourRequest) {
+			System.out.println("NeighbourRequest");
 			handleNeighbourRequest((NeighbourRequest) message);
 		} else {
 			unhandled(message);
@@ -124,7 +128,6 @@ public class UserActor extends UntypedActor {
 			addToBalance(amount);
 			removeRequest(requestID);
 		} else {
-			// TODO: warning -> no open request
 			System.out.println("Not requested transaction reply.");
 		}
 	}
@@ -150,6 +153,18 @@ public class UserActor extends UntypedActor {
 		openRequests.remove(requestID);
 	}
 
+	private boolean isOpenReply(UUID requestId) {
+		return openReplies.containsKey(requestId);
+	}
+
+	private void addReply(UUID requestID, int amount) {
+		openReplies.put(requestID, new Integer(amount));
+	}
+
+	private void removeReply(UUID requestID) {
+		openReplies.remove(requestID);
+	}
+
 	private void handleTransactionRequest(TransactionRequest message) {
 		String userName = message.getUserName();
 		UUID messageID = message.getID();
@@ -173,8 +188,9 @@ public class UserActor extends UntypedActor {
 		UUID requestID = message.getID();
 		String sender = message.getSenderName();
 
-		addToBalance(amount);
-		userControl.updateBalance(getBalance());
+		if (getBalance() > amount) {
+			addReply(requestID, amount);
+		}
 		TransactionReply reply = new TransactionReply(sender, requestID);
 		getSelf().tell(reply, getSelf());
 
@@ -341,6 +357,24 @@ public class UserActor extends UntypedActor {
 		private final UUID requestID;
 
 		public TransactionReply(String userName, UUID requestID) {
+			this.userName = userName;
+			this.requestID = requestID;
+		}
+
+		public String getUserName() {
+			return userName;
+		}
+
+		public UUID getRequestID() {
+			return requestID;
+		}
+	}
+
+	public static class TransactionAccept extends Message {
+		private final String userName;
+		private final UUID requestID;
+
+		public TransactionAccept(String userName, UUID requestID) {
 			this.userName = userName;
 			this.requestID = requestID;
 		}
