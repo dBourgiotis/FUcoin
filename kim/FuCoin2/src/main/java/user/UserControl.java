@@ -28,7 +28,7 @@ public class UserControl {
 		this.userName = userName;
 		userActor = system.actorOf(UserActor.props(userName, this, initBalance));
 		neighbours = new HashSet<>();
-		balance = initBalance;
+		setBalance(initBalance);
 		inbox = Inbox.create(system);
 		this.system = system;
 		createUserFrame();
@@ -36,7 +36,7 @@ public class UserControl {
 
 
 	private void createUserFrame() {
-		UserStaticContext context = new UserStaticContext(this, userName, balance, userActor);
+		UserStaticContext context = new UserStaticContext(this, userName, getBalance(), userActor);
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -66,10 +66,19 @@ public class UserControl {
 
 	public void updateBalance(int balance) {
 		userFrame.updateBalance(balance);
+		setBalance(balance);
 	}
 
 	public void updateNeighbours(Collection<String> neighbours) {
 		userFrame.updateNeighbours(neighbours);
+	}
+	public int getBalance() {
+		return balance;
+	}
+
+
+	public void setBalance(int balance) {
+		this.balance = balance;
 	}
 	public class UserStaticContext {
 		private final UserControl userControl;
