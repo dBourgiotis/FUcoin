@@ -35,7 +35,7 @@ public class UserFrame extends JFrame {
 	 */
 	public UserFrame(UserStaticContext context) {
 		this.userControl = context.getUserControl();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 830, 387);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
