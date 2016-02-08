@@ -57,7 +57,10 @@ public class UserControl {
 	}
 
 	public void addNewNeighbour(String userName, String address) {
-		ActorRef actor = system.actorFor(address);
+		ActorRef actor = null;
+		if (address != null && !address.equals("")) {
+			actor = system.actorFor(address);
+		}
 		Inbox inbox = Inbox.create(system);
 		JoinReply reply = new JoinReply(userName, actor);
 

@@ -248,11 +248,13 @@ public class UserActor extends UntypedActor {
 		String userName = message.getUserName();
 		UUID messageID = message.getID();
 
-		if (isNeighbour(userName)) {
+		if (isMessageSeen(messageID)) {
+			// discard message
+		} else if (isNeighbour(userName)) {
 			ActorRef address = getAddress(userName);
 			JoinReply reply = new JoinReply(userName, address);
 			sender.tell(reply, getSelf());
-		} else if (!isMessageSeen(messageID)) {
+		} else {
 			gossip(message);
 		}
 		markMessageSeen(messageID);
@@ -269,7 +271,12 @@ public class UserActor extends UntypedActor {
 	private void handleJoinReply(JoinReply message) {
 		String userName = message.getUserName();
 		ActorRef address = message.getAddress();
-		addNeighbour(userName, address);
+		if (address != null) {
+			addNeighbour(userName, address);
+		} else {
+			JoinRequest joinRequest = new JoinRequest(userName);
+			gossip(joinRequest);
+		}
 	}
 
 	private void gossip(Message message) {

@@ -94,4 +94,5 @@ public class UserActorTest {
 		assertEquals(0, preAmountKim - afterAmountKim);
 		assertEquals(0, preAmountBerkay - afterAmountBerkay);
 	}
+
 }
