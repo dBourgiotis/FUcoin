@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Implementation-Title: FUCoin
+Implementation-Version: 1.0 alpha
+Main-Class: main.Main
+

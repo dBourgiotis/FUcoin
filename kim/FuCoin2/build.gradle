@@ -9,6 +9,15 @@
 
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
+apply plugin: 'application'
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'FUCoin',
+                   'Implementation-Version': '1.0 alpha',
+		           'Main-Class': 'main.Main'
+    }
+}
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -32,3 +41,6 @@ dependencies {
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
 }
+
+mainClassName = 'main.Main'
+applicationName = 'FUCoin'

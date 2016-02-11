@@ -13,7 +13,7 @@ public class Main {
 	 * 
 	 * @throws InterruptedException
 	 */
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 		Config config = ConfigFactory.defaultApplication();
 		ActorSystem system = ActorSystem.create("TestSystem", config);
 
@@ -24,8 +24,11 @@ public class Main {
 		UserControl alex = new UserControl(system, "Alex", 1000);
 		UserControl dimi = new UserControl(system, "Dimi", 5);
 		UserControl berkay = new UserControl(system, "Berkay", 10);
-
-		Thread.sleep(1000L);
+		try {
+			Thread.sleep(1000L);
+		} catch (Exception E) {
+			System.out.println("Interruption Exception.");
+		}
 		// kim.addNewNeighbour("Alex", "akka://TestSystem/user/$b");
 		// kim.addNewNeighbour("Alex", "akka.tcp://TestSystem@127.0.0.1:2552/user/$b");
 		dimi.addNewNeighbour("Alex", "akka://TestSystem/user/$a");

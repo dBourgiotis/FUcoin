@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="UserActorTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2016-02-11T15:51:37" hostname="Kims-Laptop" time="0.325">
+  <properties/>
+  <testcase name="testPositiveTransactionLimit" classname="UserActorTest" time="0.082"/>
+  <testcase name="testNegativeTransaction" classname="UserActorTest" time="0.081"/>
+  <testcase name="testPositiveTransaction" classname="UserActorTest" time="0.08"/>
+  <testcase name="testNegativeTransactionLimit" classname="UserActorTest" time="0.082"/>
+  <system-out><![CDATA[==================
+Username: Kim
+JoinReply
+==================
+Username: Dimi
+JoinReply
+==================
+Username: Dimi
+JoinReply
+==================
+Username: Alex
+JoinReply
+==================
+Username: Alex
+JoinReply
+==================
+Username: Kim
+JoinReply
+==================
+Username: Berkay
+JoinReply
+==================
+Username: Berkay
+JoinReply
+==================
+Username: Kim
+TransactionInit
+Not enough money.
+==================
+Username: Kim
+TransactionInit
+==================
+Username: Berkay
+TransactionRequest
+-20
+==================
+Username: Berkay
+TransactionReply
+==================
+Username: Kim
+TransactionReply
+==================
+Username: Berkay
+TransactionAccept
+==================
+Username: Kim
+TransactionInit
+==================
+Username: Berkay
+TransactionRequest
+20
+==================
+Username: Berkay
+TransactionReply
+==================
+Username: Kim
+TransactionReply
+==================
+Username: Berkay
+TransactionAccept
+==================
+Username: Kim
+TransactionInit
+==================
+Username: Berkay
+TransactionRequest
+Not enough money to comply the request.
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
